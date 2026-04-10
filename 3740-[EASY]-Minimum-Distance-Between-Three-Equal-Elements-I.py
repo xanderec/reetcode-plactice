@@ -86,3 +86,49 @@ class Solution2:
                 l += 1
 
         return res if res != inf else -1
+
+
+class Solution3:
+    """
+    Intuition:
+        Overall the same as Solution2, the only difference
+        is to realize that the distance calculation formula
+        can be simplified to 2 * abs(k - i).
+
+    Runtime:
+        Same as Solution2.
+
+    Memory:
+        Same as Solution2.
+    """
+
+    def minimumDistance(self, nums: list[int]) -> int:
+        # early return for base case
+        if len(nums) < 3:
+            return -1
+
+        res = inf
+
+        # build hashmap
+        hashmap: defaultdict[int, list[int]] = defaultdict(list)
+        for i, n in enumerate(nums):
+            hashmap[n].append(i)
+
+        # search thru lists of indices
+        for val in hashmap.values():
+            # if given num is not present at at least 3 indices, skip
+            if len(val) < 3:
+                continue
+
+            # fixed sliding window over indices
+            l = 0
+            while l < len(val) - 2:
+                r = l + 2
+                dist = abs(val[l] - val[r]) * 2
+
+                if dist < res:
+                    res = dist
+
+                l += 1
+
+        return res if res != inf else -1
