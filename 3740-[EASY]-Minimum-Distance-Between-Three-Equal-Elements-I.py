@@ -1,7 +1,8 @@
+from collections import defaultdict
 from math import inf
 
 
-class Solution:
+class Solution1:
     """
     Intuition:
         Brute force approach.
@@ -26,5 +27,62 @@ class Solution:
                 for k in range(j + 1, N):
                     if nums[i] == nums[j] == nums[k]:
                         res = min(res, abs(i - j) + abs(j - k) + abs(k - i))
+
+        return res if res != inf else -1
+
+
+class Solution2:
+    """
+    Intuition:
+        We can build a hashmap by keying on each unique value
+        in the input `nums` array and storing all the indices
+        for that number as the value.
+
+        Then, we can use a sliding window approach to calculate
+        min distances across indices if a value has more than
+        3 occurrences.
+
+    Runtime:
+        O(n) to build the hashtable since we need to process
+        each input element.
+
+        O(n) in the worst case to compute the min distance
+        using sliding window if all the indices map to the
+        same key value (i.e. array of duplicates only).
+
+        Overall, we have O(n) + O(n) which yields O(n).
+
+    Memory:
+        O(n) for the hashtable.
+    """
+
+    def minimumDistance(self, nums: list[int]) -> int:
+        # early return for base case
+        if len(nums) < 3:
+            return -1
+
+        res = inf
+
+        # build hashmap
+        hashmap: defaultdict[int, list[int]] = defaultdict(list)
+        for i, n in enumerate(nums):
+            hashmap[n].append(i)
+
+        # search thru lists of indices
+        for val in hashmap.values():
+            # if given num is not present at at least 3 indices, skip
+            if len(val) < 3:
+                continue
+
+            # fixed sliding window over indices
+            l = 0
+            while l < len(val) - 2:
+                i, j, k = val[l], val[l + 1], val[l + 2]
+                dist = abs(i - j) + abs(j - k) + abs(k - i)
+
+                if dist < res:
+                    res = dist
+
+                l += 1
 
         return res if res != inf else -1
