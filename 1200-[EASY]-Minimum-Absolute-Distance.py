@@ -2,7 +2,7 @@ from collections import defaultdict
 from math import inf
 
 
-class Solution:
+class Solution1:
     """
     Intuition:
         We sort the array to minimize the elements wit respect
@@ -48,3 +48,49 @@ class Solution:
                 minDiff = diff
 
         return hashmap[minDiff]
+
+
+class Solution2:
+    """
+    Intuition:
+        We can ditcht the hashmap because it overcomplicates
+        the problem. Instead, the key observation is that
+        whatever we store in result gets wiped if we encounter
+        a new minimum.
+
+        Therefore, we just reset the result array whenever we
+        encounter a lower difference. Then, we only append to
+        the result if the difference is equivalent to the min
+        difference.
+
+    Runtime:
+        Still O(n * log n) since we have to sort the input array.
+
+    Memort:
+        Still O(n) since we have to sort the array in place.
+    """
+
+    def minimumAbsDifference(self, arr: list[int]) -> list[list[int]]:
+        if not arr:
+            return []
+
+        arr.sort()
+
+        minDiff = inf
+        res: list[list[int]] = []
+        prev = arr[0]
+
+        for n in arr[1:]:
+            currDiff = n - prev
+
+            # found new min abs diff
+            if currDiff < minDiff:
+                minDiff = currDiff
+                res = []
+
+            if currDiff == minDiff:
+                res.append([prev, n])
+
+            prev = n
+
+        return res
