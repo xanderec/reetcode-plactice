@@ -2,7 +2,7 @@ from collections import defaultdict
 from math import inf
 
 
-class Solution:
+class Solution1:
     """
     Intuition:
         See intuition for problem 3740, Solution 2 & 3.
@@ -44,3 +44,58 @@ class Solution:
                     minDist = dist
 
         return minDist if minDist != inf else -1
+
+
+class Solution2:
+    """
+    Intuition:
+        We can keep track of 2 hashmaps. 1 for the last index of an
+        encountered number and another for the index previous to the
+        last one.
+
+        While looping through the input, we update both hashmaps
+        accordingly. Whenever we match on an element existing in
+        `prevprev`, then we know we should compute if the distance is
+        a new min.
+
+    Runtime:
+        O(n) since every element in the input array is processed once.
+
+    Memory:
+        O(n) space for the `prev` hashmap.
+
+        O(n) space for the `prevprev` hashmap. Feel like this is a very
+        loose upper bound since it will never be as populated as `prev`
+        due to it requiring its elements to have frequency 2. So I guess
+        O(n / 2) ~ O(n).
+
+        Overall, O(n) space.
+    """
+
+    def minimumDistance(self, nums: list[int]) -> int:
+        if len(nums) < 3:
+            return -1
+
+        prev: dict[int, int] = {}
+        prevprev: dict[int, int] = {}
+        res = inf
+
+        for i, n in enumerate(nums):
+            if n in prevprev:
+                k = prevprev[n]
+                dist = 2 * abs(i - k)
+                if dist < res:
+                    res = dist
+
+                prevprev[n] = prev[n]
+                prev[n] = i
+            elif n in prev:
+                prevprev[n] = prev[n]
+                prev[n] = i
+            else:
+                prev[n] = i
+
+        if res == inf:
+            return -1
+        else:
+            return res
