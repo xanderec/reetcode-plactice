@@ -12,9 +12,4 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.pyright]
-reportOptionalMemberAccess = false
-reportArgumentType = false
-reportAssignmentType = false
-reportReturnType = false
-reportAttributeAccessIssue = false
-reportCallIssue = false
+typeCheckingMode = "off"
