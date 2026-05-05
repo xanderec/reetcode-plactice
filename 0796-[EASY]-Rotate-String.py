@@ -1,4 +1,4 @@
-class Solution:
+class Solution1:
     """
     Intution:
         Brute force approach. Slice string by every index and
@@ -20,3 +20,31 @@ class Solution:
                 return True
 
         return False
+
+
+class Solution2:
+    """
+    Intuition:
+        The constructed string s + s will contain all rotated forms.
+        Since we are trying to fit goal into this constructed string,
+        we simply use substring matching to check.
+
+        We also need a guard to ensure that the lengths of both inputs
+        are the same.
+
+    Runtime:
+        O(2 * n) ~ O(n) to construct s + s.
+
+        O(2 * n) ~ O(n) for substring match.
+
+        Overall, O(n) runtime.
+
+    Memory:
+        O(2 * n) to allocate s + s string.
+    """
+
+    def rotateString(self, s: str, goal: str) -> bool:
+        if len(s) != len(goal):
+            return False
+
+        return goal in s + s
