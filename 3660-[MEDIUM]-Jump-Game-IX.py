@@ -1,4 +1,4 @@
-class Solution:
+class Solution1:
     """
     Intuition:
         We can think of the input as intervals or groups for which every
@@ -46,4 +46,44 @@ class Solution:
             for j in range(stack[i][1], stack[i][2] + 1):
                 res[j] = stack[i][0]
 
+        return res
+
+
+class Solution2:
+    """
+    Intuition:
+        Use a 2 pass approach. We can populate "naive" values in the result
+        using prefix max scan.
+
+        Then, our 2nd scan replicates the "merging" we did in the monotonic
+        stack approach. We maintain a dynamic index 'ix' while traversing the
+        'res' array backwards. At each step, we can either inherit values by
+        seeing that we can jump to a smaller value or we can adjust 'ix' by
+        realizing that we have encountered a smaller value which marks the
+        transition to a different block interval.
+
+    Runtime:
+        Still O(n) since 2 linear scans.
+
+    Memory:
+        Still O(n) for 'res' array. O(1) auxiliary space.
+    """
+
+    def maxValue(self, nums: list[int]) -> list[int]:
+        # pass 1 - prefix max for each elmt
+        N, res = len(nums), [nums[0]]
+        for n in nums[1:]:
+            res.append(max(res[-1], n))
+
+        # pass 2 - adjust maximum values
+        ix = N - 1
+        for i in range(N - 2, -1, -1):
+            # prefix max can jump to lower value
+            # lower value at nums[ix] must jump to value greater or eq
+            if res[i] > nums[ix]:
+                res[i] = res[ix]
+            # smaller value encountered, break through to diff interval
+            # this diff interval has diff max value than curr interval so adjust bounds
+            if nums[i] < nums[ix]:
+                ix = i
         return res
