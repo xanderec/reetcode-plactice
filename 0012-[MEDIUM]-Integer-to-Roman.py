@@ -1,4 +1,4 @@
-class Solution:
+class Solution1:
     """
     Intuition:
         We maintain a stack to build our Roman numeral. We use a greedy approach
@@ -43,3 +43,47 @@ class Solution:
                     stack.append(hmap[amt])
 
         return "".join(stack)
+
+
+class Solution2:
+    """
+    Intuition:
+        We can reduce the complexity of the state management from the previous
+        solution by relying on the fact that the problem can be solved via a
+        greedy approach.
+
+        Instead of trying to detect when to use subtractive forms, just include
+        those in the initial map of values we try to subtract from the input
+        number.
+
+    Runtime:
+        Still O(1).
+
+    Memory:
+        Still O(1) as well.
+    """
+
+    def intToRoman(self, num: int) -> str:
+        vals = [
+            (1000, "M"),
+            (900, "CM"),
+            (500, "D"),
+            (400, "CD"),
+            (100, "C"),
+            (90, "XC"),
+            (50, "L"),
+            (40, "XL"),
+            (10, "X"),
+            (9, "IX"),
+            (5, "V"),
+            (4, "IV"),
+            (1, "I"),
+        ]
+        res = []
+
+        for val, symbol in vals:
+            cnt = num // val
+            res.append(symbol * cnt)
+            num -= val * cnt
+
+        return "".join(res)
