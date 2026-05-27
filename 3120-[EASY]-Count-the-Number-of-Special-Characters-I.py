@@ -57,3 +57,27 @@ class Solution2:
                 res.add(letter.lower())
 
         return len(res)
+
+
+class Solution3:
+    """
+    Intuition:
+        Hashset oriented approach as well, except we change the loop
+        to go over all letters in the alphabet.
+
+    Runtime:
+        Still O(n).
+
+    Memory:
+        Still O(1).
+    """
+
+    def numberOfSpecialChars(self, word: str) -> int:
+        letters = set(word)
+        res = 0
+
+        for letter in "abcdefghijklmnopqrstuvwxyz":
+            if letter in letters and letter.upper() in letters:
+                res += 1
+
+        return res
