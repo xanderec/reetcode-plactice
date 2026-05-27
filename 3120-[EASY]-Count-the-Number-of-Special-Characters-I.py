@@ -1,4 +1,4 @@
-class Solution:
+class Solution1:
     """
     Intuition:
         Initialize a bitmap for lower and uppercase chars.
@@ -27,3 +27,33 @@ class Solution:
 
         res = [a and b for a, b in zip(lower, upper)]
         return sum(res)
+
+
+class Solution2:
+    """
+    Intuition:
+        Hash the chars in the input word and iterate over them
+        by checking both variants and seeing if they are both
+        present.
+
+    Runtime:
+        O(n) to hash.
+
+    Memory:
+        O(1) given that we have at most 26 * 2 letters in our
+        hash set.
+    """
+
+    def numberOfSpecialChars(self, word: str) -> int:
+        letters = set(word)
+        res = set()
+
+        for letter in letters:
+            if (
+                letter.lower() in letters
+                and letter.upper() in letters
+                and letter.lower() not in res
+            ):
+                res.add(letter.lower())
+
+        return len(res)
