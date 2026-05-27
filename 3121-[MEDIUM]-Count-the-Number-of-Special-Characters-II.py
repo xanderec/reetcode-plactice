@@ -1,4 +1,4 @@
-class Solution:
+class Solution1:
     """
     Intuition:
         Brute force approahc. Linearly scan the input word and use
@@ -42,3 +42,35 @@ class Solution:
                     lower[ix] = -1
 
         return sum(upper)
+
+
+class Solution2:
+    """
+    Intuition:
+        We store the last occurrence of the lower variant and the first occurrence
+        of the upper variant. At the end, we check that the last lower does not
+        overlap with the first upper.
+
+    Runtime:
+        O(n) to consume the input word.
+
+    Memory:
+        O(1) for the arrays.
+    """
+
+    def numberOfSpecialChars(self, word: str) -> int:
+        lastLowerIx = [-1] * 26
+        firstUpperIx = [-1] * 26
+
+        for pos, c in enumerate(word):
+            cIx = ord(c.lower()) - ord("a")
+
+            if c.islower():
+                if pos > lastLowerIx[cIx]:
+                    lastLowerIx[cIx] = pos
+            else:
+                if firstUpperIx[cIx] == -1:
+                    firstUpperIx[cIx] = pos
+
+        # note condition requires last lower < first upper AND that we actually encountered a lower
+        return sum([lL < fU and lL != -1 for lL, fU in zip(lastLowerIx, firstUpperIx)])
