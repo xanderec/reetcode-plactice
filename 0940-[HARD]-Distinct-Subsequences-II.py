@@ -1,4 +1,4 @@
-class Solution:
+class Solution1:
     """
     Intuition:
         We use a bottom-up tabulation approach.
@@ -52,3 +52,37 @@ class Solution:
 
         # -1 because we exclude the empty subseq base case ""
         return (dp[-1] - 1) % (10**9 + 7)
+
+
+class Solution2:
+    """
+    Intuition:
+        Same intuition as Solution 1.
+
+        Notice how in the recurrence relation, state i only depends on state i - 1
+        and the number of distinct subseqs at the last occurrence of char c. Given
+        this, we don't need to persist a linear cache and can use a single variable
+        instead. The hashmap maps character to number of distinct subsequences at
+        the last occurrence now instead of mapping to the last seen index.
+
+        With these observations, we can optimize the execution of our code to be
+        much more succinct.
+
+    Runtime:
+        O(n) for the linear scan.
+
+    Memory:
+        O(n) for the `last` hashmap.
+    """
+
+    def distinctSubseqII(self, s: str) -> int:
+        MOD = 10**9 + 7
+        curr = 1
+        last = {}
+
+        for c in s:
+            next = (2 * curr - last.get(c, 0)) % MOD
+            last[c] = curr
+            curr = next
+
+        return (curr - 1) % MOD
